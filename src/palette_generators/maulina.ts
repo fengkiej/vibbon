@@ -7,20 +7,19 @@ function generatePalette(hsvColor = null, n = 5, options = {}) {
     const paletteTypes = [ "analogous", "analogousWithComplementaryAccent" ]
     const defaults = {
         palette_type: null,
-        palette_type_config: {
-            analogous: {
-                hue_shift: {
-                    min: 10,
-                    max: 10
-                },
-                saturation_shift: {
-                    min: 22,
-                    max: 22
-                },
-                value_shift: {
-                    min: 15,
-                    max: 15
-                }
+        with: null, // for options see '../harmonies.json'
+        shift_config: {
+            hue_shift: {
+                min: 10,
+                max: 10
+            },
+            saturation_shift: {
+                min: 22,
+                max: 22
+            },
+            value_shift: {
+                min: 15,
+                max: 15
             } 
         }
     }
@@ -38,17 +37,10 @@ function generatePalette(hsvColor = null, n = 5, options = {}) {
 
     switch(_options.palette_type) {
         case "analogous":
-            _palette = _generateAnalogousPalette(hsvColor, n, options);
+            _palette = _generateMonochromaticPalette(hsvColor, n, options);
             break;
-        case "analogousWithComplementaryAccent":
+        case "monochromatic":
             _palette = _generateAnalogousPalette(hsvColor, n, options);
-
-            let replaceIndex = Math.floor(randomInRange(0, n));
-
-            let harmonies = colorHarmony.getHarmonies(_palette[replaceIndex]);
-
-            _palette[replaceIndex] = harmonies.complementary[1];
-
             break;
         default:
             _palette = _generateAnalogousPalette(hsvColor, n, options);
@@ -60,37 +52,26 @@ function generatePalette(hsvColor = null, n = 5, options = {}) {
 
 const _generateMonochromaticPalette = (hsvColor, n = 5, options = {}) => {
     const defaults = {
-        palette_type: null,
-        palette_type_config: {
-            analogous: {
-                hue_shift: {
-                    min: 10,
-                    max: 10
-                },
-                saturation_shift: {
-                    min: 22,
-                    max: 22
-                },
-                value_shift: {
-                    min: 15,
-                    max: 15
-                }
+        shift_config: {
+            saturation_shift: {
+                min: 22,
+                max: 22
+            },
+            value_shift: {
+                min: 15,
+                max: 15
             } 
         }
     }
     let _options = { ...defaults, ...options };
 
     let _palette = [];
-    let direction = Math.round(randomInRange(0, 1)); // 0: shift hue to left (warmer light), 1: shift hue to right (cooler shadow)
-    
-    let hueShiftMin = _options.palette_type_config.analogous.hue_shift.min;
-    let hueShiftMax = _options.palette_type_config.analogous.hue_shift.max;
 
-    let saturationShiftMin = _options.palette_type_config.analogous.saturation_shift.min;
-    let saturationShiftMax = _options.palette_type_config.analogous.saturation_shift.max;
+    let saturationShiftMin = _options.shift_config.saturation_shift.min;
+    let saturationShiftMax = _options.shift_config.saturation_shift.max;
 
-    let valueShiftMin = _options.palette_type_config.analogous.value_shift.min;
-    let valueShiftMax = _options.palette_type_config.analogous.value_shift.max;
+    let valueShiftMin = _options.shift_config.value_shift.min;
+    let valueShiftMax = _options.shift_config.value_shift.max;
 
     let mid = Math.floor(n / 2);
     _palette[mid] = hsvColor;
@@ -101,7 +82,7 @@ const _generateMonochromaticPalette = (hsvColor, n = 5, options = {}) => {
         let prevColor = _palette[i + 1];
         let nextColorCombination = getNextColorCombination(prevColor, {h: 0, s: saturationShift, v: valueShift});
 
-        let nextColor = direction == 0? nextColorCombination[4] : nextColorCombination[0];
+        let nextColor = nextColorCombination[0];
 
         _palette[i] = nextColor;
     }
@@ -112,31 +93,29 @@ const _generateMonochromaticPalette = (hsvColor, n = 5, options = {}) => {
         let prevColor = _palette[i - 1];
         let nextColorCombination = getNextColorCombination(prevColor, {h: 0, s: saturationShift, v: valueShift});
 
-        let nextColor = direction == 0? nextColorCombination[1] : nextColorCombination[5];
+        let nextColor = nextColorCombination[1];
 
         _palette[i] = nextColor;
     }
 
     return _palette;
 }
+
 
 const _generateAnalogousPalette = (hsvColor, n = 5, options = {}) => {
     const defaults = {
-        palette_type: null,
-        palette_type_config: {
-            analogous: {
-                hue_shift: {
-                    min: 10,
-                    max: 10
-                },
-                saturation_shift: {
-                    min: 22,
-                    max: 22
-                },
-                value_shift: {
-                    min: 15,
-                    max: 15
-                }
+        shift_config: {
+            hue_shift: {
+                min: 10,
+                max: 10
+            },
+            saturation_shift: {
+                min: 22,
+                max: 22
+            },
+            value_shift: {
+                min: 15,
+                max: 15
             } 
         }
     }
@@ -145,14 +124,14 @@ const _generateAnalogousPalette = (hsvColor, n = 5, options = {}) => {
     let _palette = [];
     let direction = Math.round(randomInRange(0, 1)); // 0: shift hue to left (warmer light), 1: shift hue to right (cooler shadow)
     
-    let hueShiftMin = _options.palette_type_config.analogous.hue_shift.min;
-    let hueShiftMax = _options.palette_type_config.analogous.hue_shift.max;
+    let hueShiftMin = _options.shift_config.hue_shift.min;
+    let hueShiftMax = _options.shift_config.hue_shift.max;
 
-    let saturationShiftMin = _options.palette_type_config.analogous.saturation_shift.min;
-    let saturationShiftMax = _options.palette_type_config.analogous.saturation_shift.max;
+    let saturationShiftMin = _options.shift_config.saturation_shift.min;
+    let saturationShiftMax = _options.shift_config.saturation_shift.max;
 
-    let valueShiftMin = _options.palette_type_config.analogous.value_shift.min;
-    let valueShiftMax = _options.palette_type_config.analogous.value_shift.max;
+    let valueShiftMin = _options.shift_config.value_shift.min;
+    let valueShiftMax = _options.shift_config.value_shift.max;
 
     let mid = Math.floor(n / 2);
     _palette[mid] = hsvColor;
@@ -184,16 +163,7 @@ const _generateAnalogousPalette = (hsvColor, n = 5, options = {}) => {
     return _palette;
 }
 
-const getNextColorCombination = (hsvColor, shifts, options = {}) => {
-    const defaults = {
-        lock: {
-          hue: null,
-          saturation: null,
-          value: null,
-        }
-      };
-    const _options = {...defaults, ...options};
-
+const getNextColorCombination = (hsvColor, shifts) => {
     let hue_0 = hsvColor.h - shifts.h;
     hue_0 = hue_0 > 360? hue_0 % 360 : hue_0;
     hue_0 = hue_0 < 0? 360 + (hue_0 % 360) : hue_0;
