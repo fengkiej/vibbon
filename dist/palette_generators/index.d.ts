@@ -1,6 +1,6 @@
 export declare const paletteGenerators: {
     random: {
-        generatePalette: (hsvColor?: any, n?: number, options?: {}) => any[];
+        generatePalette: (options?: {}) => any[];
         colorGenerator: {
             randomColor: (options?: {}) => {
                 h: number;
@@ -16,9 +16,9 @@ export declare const paletteGenerators: {
         };
     };
     alli: {
-        generatePalette: (hsvColor?: any, n?: number, options?: {}) => any[];
+        generatePalette: (options?: {}) => any[];
     };
     maulina: {
-        generatePalette: (hsvColor?: any, n?: number, options?: {}) => any;
+        generatePalette: (options?: {}) => any;
     };
 };

@@ -18,14 +18,18 @@ const randomColor = (options = {}) => {
 
 const randomPalette = (
     method = 'random',
-    hsvColor = null,
-    n = 5,
     options = {}) => {
   if (!paletteGenerators.hasOwnProperty(method)) {
     throw new Error(`Invalid palette generation method of ${method}.`);
   }
 
-  return paletteGenerators[method].generatePalette(hsvColor, n, options);
+  const defaults = {
+    starting_color: null,
+    n: 5,
+  };
+  const _options = {...defaults, ...options};
+
+  return paletteGenerators[method].generatePalette(_options);
 };
 
 export const Vibbon = {

@@ -3,9 +3,11 @@ import { randomColor } from '../color_generator';
 import { randomInRange } from '../prng';
 import { colorHarmony } from '../color_harmony';
 
-function generatePalette(hsvColor = null, n = 5, options = {}) {
+function generatePalette(options = {}) {
     const paletteTypes = [ "analogous", "analogousWithComplementaryAccent" ]
     const defaults = {
+        starting_color: null,
+        n: 5,
         palette_type: null,
         with: null, // for options see '../harmonies.json'
         shift_config: {
@@ -25,6 +27,9 @@ function generatePalette(hsvColor = null, n = 5, options = {}) {
     }
     let _options = { ...defaults, ...options };
 
+    let hsvColor = _options.starting_color;
+    let n = _options.n;
+
     if (typeof n != 'number') throw new Error(`invalid type for n: ${n}.`);
     if (_options.palette_type == null) _options.palette_type = "analogous"; // set default to "analogous"
     if (paletteTypes.indexOf(_options.palette_type) == -1) throw new Error(`invalid palette_type of ${_options.palette_type}`);
@@ -37,10 +42,10 @@ function generatePalette(hsvColor = null, n = 5, options = {}) {
 
     switch(_options.palette_type) {
         case "analogous":
-            _palette = _generateMonochromaticPalette(hsvColor, n, options);
+            _palette = _generateAnalogousPalette(hsvColor, n, options);
             break;
         case "monochromatic":
-            _palette = _generateAnalogousPalette(hsvColor, n, options);
+            _palette = _generateMonochromaticPalette(hsvColor, n, options);
             break;
         default:
             _palette = _generateAnalogousPalette(hsvColor, n, options);

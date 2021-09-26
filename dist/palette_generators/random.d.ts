@@ -1,4 +1,4 @@
-declare function generatePalette(hsvColor?: any, n?: number, options?: {}): any[];
+declare function generatePalette(options?: {}): any[];
 export declare const random: {
     generatePalette: typeof generatePalette;
     colorGenerator: {

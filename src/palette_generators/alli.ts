@@ -3,11 +3,16 @@ import templates = require('../templates.json');
 import { colorGenerator } from '../color_generator';
 import { prng } from '../prng';
 
-function generatePalette(hsvColor = null, n = 5, options = {}) {
+function generatePalette(options = {}) {
     const defaults = {
+        starting_color: null,
+        n: 5,
         template: null
     }
     let _options = { ...defaults, ...options };
+
+    let hsvColor = _options.starting_color;
+    let n = _options.n;
 
     if (typeof n != 'number') throw new Error(`invalid type for n: ${n}.`);
 
@@ -25,7 +30,7 @@ function generatePalette(hsvColor = null, n = 5, options = {}) {
         _palette.push(hsvColor);
     }
 
-    for (var i = 0; i < n - 1; i++) {
+    for (let i = 0; i < n - 1; i++) {
         let color = colorGenerator.randomColor({
             lock: {
                 saturation: hsvColor.s,

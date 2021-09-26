@@ -26,7 +26,7 @@ export declare const Vibbon: {
         s: number;
         v: number;
     };
-    randomPalette: (method?: string, hsvColor?: any, n?: number, options?: {}) => any;
+    randomPalette: (method?: string, options?: {}) => any;
     utils: {
         RGBToHSV: (r: any, g: any, b: any) => {
             h: number;

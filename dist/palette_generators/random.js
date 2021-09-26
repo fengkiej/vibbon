@@ -13,12 +13,15 @@ var __assign = (this && this.__assign) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.random = void 0;
 var color_generator_1 = require("../color_generator");
-function generatePalette(hsvColor, n, options) {
-    if (hsvColor === void 0) { hsvColor = null; }
-    if (n === void 0) { n = 5; }
+function generatePalette(options) {
     if (options === void 0) { options = {}; }
-    var defaults = {};
+    var defaults = {
+        starting_color: null,
+        n: 5
+    };
     var _options = __assign(__assign({}, defaults), options);
+    var hsvColor = _options.starting_color;
+    var n = _options.n;
     if (hsvColor != null && !(['h', 's', 'v'].every(function (k) { return hsvColor.hasOwnProperty(k); }))) {
         throw new Error("invalid hsvColor of " + hsvColor + ".");
     }

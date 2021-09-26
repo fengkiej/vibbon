@@ -16,14 +16,16 @@ exports.alli = void 0;
 var templates = require("../templates.json");
 var color_generator_1 = require("../color_generator");
 var prng_1 = require("../prng");
-function generatePalette(hsvColor, n, options) {
-    if (hsvColor === void 0) { hsvColor = null; }
-    if (n === void 0) { n = 5; }
+function generatePalette(options) {
     if (options === void 0) { options = {}; }
     var defaults = {
+        starting_color: null,
+        n: 5,
         template: null
     };
     var _options = __assign(__assign({}, defaults), options);
+    var hsvColor = _options.starting_color;
+    var n = _options.n;
     if (typeof n != 'number')
         throw new Error("invalid type for n: " + n + ".");
     var _palette = [];

@@ -55,13 +55,13 @@ describe("paletteGenerators/random", () => {
     });
 
     it("should fail if hsvColor is not null, but has invalid structure", () => {
-        expect(() => paletteGenerators.random.generatePalette({h: 'as', s: 123, v: 234})).to.be.throw(Error, 'invalid hsvColor');
-        expect(() => paletteGenerators.random.generatePalette({g: 123, v: 234})).to.be.throw(Error, 'invalid hsvColor');
+        expect(() => paletteGenerators.random.generatePalette({starting_color: {h: 'as', s: 123, v: 234}})).to.be.throw(Error, 'invalid hsvColor');
+        expect(() => paletteGenerators.random.generatePalette({starting_color: {g: 123, v: 234}})).to.be.throw(Error, 'invalid hsvColor');
     });
 
     it("should contains hsvColor is hsvColor parameter is passed", () => {
         let color = { h: 57.929866078631754, s: 33.84021767816029, v: 47.10519547325103 }
-        let colorPalette = paletteGenerators.random.generatePalette(color);
+        let colorPalette = paletteGenerators.random.generatePalette({starting_color: color});
         expect(colorPalette).to.contain(color);
     });
 });

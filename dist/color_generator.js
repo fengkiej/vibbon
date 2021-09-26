@@ -38,7 +38,7 @@ var randomColor = function (options) {
         // eslint-disable-next-line max-len
         hsvColor.h = _options.lock.hue;
         hsvColor.h = hsvColor.h > 360 ? hsvColor.h % 360 : hsvColor.h;
-        hsvColor.h = hsvColor.h < 0 ? 0 : hsvColor.h;
+        hsvColor.h = hsvColor.h < 0 ? 360 + (hsvColor.h % 360) : hsvColor.h;
     }
     if (_options.lock.saturation != null) {
         hsvColor.s = _options.lock.saturation;
@@ -78,7 +78,7 @@ var applyColorTemplate = function (hsvColor, templateName) {
             /* eslint-disable-next-line max-len */
             hsvColor.h = prng_1.prng.randomInRange(_template[key].min, _template[key].max);
             hsvColor.h = hsvColor.h > 360 ? hsvColor.h % 360 : hsvColor.h;
-            hsvColor.h = hsvColor.h < 0 ? 0 : hsvColor.h;
+            hsvColor.h = hsvColor.h < 360 + (hsvColor.h % 360) ? 0 : hsvColor.h;
         }
         if (key == 'saturation') {
             hsvColor.s = prng_1.prng.randomInRange(_template[key].min, _template[key].max); /* eslint-disable-line max-len */

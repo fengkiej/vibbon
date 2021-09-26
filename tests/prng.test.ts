@@ -36,7 +36,7 @@ describe("prng", () => {
         let min = -0.534234;
         let max = 0.531212
 
-        for (var i = 0; i < 10000; i++) {
+        for (let i = 0; i < 10000; i++) {
             let randomNumber = prng.randomInRange(min, max);
             
             expect(randomNumber).to.be.gte(min);

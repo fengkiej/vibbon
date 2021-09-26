@@ -1,9 +1,14 @@
 import { colorGenerator } from '../color_generator';
 
-function generatePalette(hsvColor = null, n = 5, options = {}) {
-    const defaults = {}
+function generatePalette(options = {}) {
+    const defaults = {
+        starting_color: null,
+        n: 5
+    }
     let _options = { ...defaults, ...options };
 
+    let hsvColor = _options.starting_color;
+    let n = _options.n;
     if (hsvColor != null && !(['h', 's', 'v'].every((k) => hsvColor.hasOwnProperty(k)))) {
         throw new Error(`invalid hsvColor of ${hsvColor}.`);
     }
@@ -27,7 +32,7 @@ function generatePalette(hsvColor = null, n = 5, options = {}) {
         _palette.push(hsvColor);
     }
 
-    for (var i = 0; i < n - 1; i++) {
+    for (let i = 0; i < n - 1; i++) {
         let color = colorGenerator.randomColor(_options);
         _palette.push(color);
     }
