@@ -1,7 +1,7 @@
 {
   "name": "vibbon",
   "version": "0.0.1",
-  "description": "Color and palette generator library.",
+  "description": "Colors and palette generator library.",
   "main": "src/index.js",
   "scripts": {
     "build": "npx eslint 'src/*' --fix && npx tsc -b --clean && npx tsc -b",
