@@ -120,7 +120,7 @@ describe("colorGenerator", () => {
             v: 100
         },
         {
-            h: 0,
+            h: 300,
             s: 0,
             v: 0
         }
