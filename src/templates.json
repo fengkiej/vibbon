@@ -1,0 +1,76 @@
+{
+  "color": {
+    "neutral": {
+      "saturation": {
+        "min": 1,
+        "max": 10
+      },
+      "value": {
+        "min": 70,
+        "max": 99
+      }
+    },
+    "jewel": {
+      "saturation": {
+        "min": 73,
+        "max": 83
+      },
+      "value": {
+        "min": 56,
+        "max": 76
+      }
+    },
+    "pastel": {
+      "saturation": {
+        "min": 14,
+        "max": 21
+      },
+      "value": {
+        "min": 89,
+        "max": 96
+      }
+    },
+    "earth": {
+      "saturation": {
+        "min": 36,
+        "max": 41
+      },
+      "value": {
+        "min": 36,
+        "max": 77
+      }
+    },
+    "fluorescent": {
+      "saturation": {
+        "min": 63,
+        "max": 100
+      },
+      "value": {
+        "min": 82,
+        "max": 100
+      }
+    },
+    "shades": {
+      "saturation": {
+        "min": 0,
+        "max": 0
+      },
+      "value": {
+        "min": 0,
+        "max": 100
+      }
+    },
+    "warm": {
+      "hue": {
+        "min": 270,
+        "max": 450
+      }
+    },
+    "cool": {
+      "hue": {
+        "min": 90,
+        "max": 270
+      }
+    }
+  }
+}
