@@ -15,13 +15,14 @@ exports.maulina = void 0;
 // method from: https://www.clipstudio.net/how-to-draw/archives/156922
 var color_generator_1 = require("../color_generator");
 var prng_1 = require("../prng");
+var color_harmony_1 = require("../color_harmony");
 function generatePalette(options) {
     if (options === void 0) { options = {}; }
-    var paletteTypes = ["analogous", "analogousWithComplementaryAccent"];
+    var paletteTypes = ["analogous", "monochromatic"];
     var defaults = {
         starting_color: null,
         n: 5,
-        palette_type: null,
+        palette_type: "analogous",
         with: null,
         shift_config: {
             hue_shift: {
@@ -43,8 +44,6 @@ function generatePalette(options) {
     var n = _options.n;
     if (typeof n != 'number')
         throw new Error("invalid type for n: " + n + ".");
-    if (_options.palette_type == null)
-        _options.palette_type = "analogous"; // set default to "analogous"
     if (paletteTypes.indexOf(_options.palette_type) == -1)
         throw new Error("invalid palette_type of " + _options.palette_type);
     if (hsvColor == null) {
@@ -53,18 +52,19 @@ function generatePalette(options) {
     var _palette;
     switch (_options.palette_type) {
         case "analogous":
-            _palette = _generateAnalogousPalette(hsvColor, n, options);
+            _palette = generateAnalogousPalette(hsvColor, n, options);
             break;
         case "monochromatic":
-            _palette = _generateMonochromaticPalette(hsvColor, n, options);
+            _palette = generateMonochromaticPalette(hsvColor, n, options);
             break;
         default:
-            _palette = _generateAnalogousPalette(hsvColor, n, options);
-            break;
+            throw new Error("invalid palette_type of " + _options.palette_type + ".");
     }
+    if (_options.with != null)
+        _palette = color_harmony_1.colorHarmony.addHarmonyToPalette(_palette, _options.with);
     return _palette;
 }
-var _generateMonochromaticPalette = function (hsvColor, n, options) {
+var generateMonochromaticPalette = function (hsvColor, n, options) {
     if (n === void 0) { n = 5; }
     if (options === void 0) { options = {}; }
     var defaults = {
@@ -88,16 +88,16 @@ var _generateMonochromaticPalette = function (hsvColor, n, options) {
     var mid = Math.floor(n / 2);
     _palette[mid] = hsvColor;
     for (var i = mid - 1; i >= 0; i--) {
-        var saturationShift = (0, prng_1.randomInRange)(saturationShiftMin, saturationShiftMax);
-        var valueShift = (0, prng_1.randomInRange)(valueShiftMin, valueShiftMax);
+        var saturationShift = prng_1.prng.randomInRange(saturationShiftMin, saturationShiftMax);
+        var valueShift = prng_1.prng.randomInRange(valueShiftMin, valueShiftMax);
         var prevColor = _palette[i + 1];
         var nextColorCombination = getNextColorCombination(prevColor, { h: 0, s: saturationShift, v: valueShift });
         var nextColor = nextColorCombination[0];
         _palette[i] = nextColor;
     }
     for (var i = mid + 1; i < n; i++) {
-        var saturationShift = (0, prng_1.randomInRange)(saturationShiftMin, saturationShiftMax);
-        var valueShift = (0, prng_1.randomInRange)(valueShiftMin, valueShiftMax);
+        var saturationShift = prng_1.prng.randomInRange(saturationShiftMin, saturationShiftMax);
+        var valueShift = prng_1.prng.randomInRange(valueShiftMin, valueShiftMax);
         var prevColor = _palette[i - 1];
         var nextColorCombination = getNextColorCombination(prevColor, { h: 0, s: saturationShift, v: valueShift });
         var nextColor = nextColorCombination[1];
@@ -105,7 +105,7 @@ var _generateMonochromaticPalette = function (hsvColor, n, options) {
     }
     return _palette;
 };
-var _generateAnalogousPalette = function (hsvColor, n, options) {
+var generateAnalogousPalette = function (hsvColor, n, options) {
     if (n === void 0) { n = 5; }
     if (options === void 0) { options = {}; }
     var defaults = {
@@ -126,7 +126,7 @@ var _generateAnalogousPalette = function (hsvColor, n, options) {
     };
     var _options = __assign(__assign({}, defaults), options);
     var _palette = [];
-    var direction = Math.round((0, prng_1.randomInRange)(0, 1)); // 0: shift hue to left (warmer light), 1: shift hue to right (cooler shadow)
+    var direction = Math.round(prng_1.prng.randomInRange(0, 1)); // 0: shift hue to left (warmer light), 1: shift hue to right (cooler shadow)
     var hueShiftMin = _options.shift_config.hue_shift.min;
     var hueShiftMax = _options.shift_config.hue_shift.max;
     var saturationShiftMin = _options.shift_config.saturation_shift.min;
@@ -136,18 +136,18 @@ var _generateAnalogousPalette = function (hsvColor, n, options) {
     var mid = Math.floor(n / 2);
     _palette[mid] = hsvColor;
     for (var i = mid - 1; i >= 0; i--) {
-        var hueShift = (0, prng_1.randomInRange)(hueShiftMin, hueShiftMax);
-        var saturationShift = (0, prng_1.randomInRange)(saturationShiftMin, saturationShiftMax);
-        var valueShift = (0, prng_1.randomInRange)(valueShiftMin, valueShiftMax);
+        var hueShift = prng_1.prng.randomInRange(hueShiftMin, hueShiftMax);
+        var saturationShift = prng_1.prng.randomInRange(saturationShiftMin, saturationShiftMax);
+        var valueShift = prng_1.prng.randomInRange(valueShiftMin, valueShiftMax);
         var prevColor = _palette[i + 1];
         var nextColorCombination = getNextColorCombination(prevColor, { h: hueShift, s: saturationShift, v: valueShift });
         var nextColor = direction == 0 ? nextColorCombination[4] : nextColorCombination[0];
         _palette[i] = nextColor;
     }
     for (var i = mid + 1; i < n; i++) {
-        var hueShift = (0, prng_1.randomInRange)(hueShiftMin, hueShiftMax);
-        var saturationShift = (0, prng_1.randomInRange)(saturationShiftMin, saturationShiftMax);
-        var valueShift = (0, prng_1.randomInRange)(valueShiftMin, valueShiftMax);
+        var hueShift = prng_1.prng.randomInRange(hueShiftMin, hueShiftMax);
+        var saturationShift = prng_1.prng.randomInRange(saturationShiftMin, saturationShiftMax);
+        var valueShift = prng_1.prng.randomInRange(valueShiftMin, valueShiftMax);
         var prevColor = _palette[i - 1];
         var nextColorCombination = getNextColorCombination(prevColor, { h: hueShift, s: saturationShift, v: valueShift });
         var nextColor = direction == 0 ? nextColorCombination[1] : nextColorCombination[5];
@@ -166,8 +166,8 @@ var getNextColorCombination = function (hsvColor, shifts) {
     value_0 = value_0 > 100 ? 100 : value_0;
     value_0 = value_0 < 0 ? 0 : value_0;
     var hue_1 = hsvColor.h + shifts.h;
-    hue_1 = hue_1 > 360 ? hue_1 % 360 : hue_0;
-    hue_1 = hue_1 < 0 ? 360 + (hue_1 % 360) : hue_0;
+    hue_1 = hue_1 > 360 ? hue_1 % 360 : hue_1;
+    hue_1 = hue_1 < 0 ? 360 + (hue_1 % 360) : hue_1;
     var saturation_1 = hsvColor.s + shifts.s;
     saturation_1 = saturation_1 > 100 ? 100 : saturation_1;
     saturation_1 = saturation_1 < 0 ? 0 : saturation_1;
@@ -201,4 +201,4 @@ var getNextColorCombination = function (hsvColor, shifts) {
         }
     };
 };
-exports.maulina = { generatePalette: generatePalette };
+exports.maulina = { generatePalette: generatePalette, getNextColorCombination: getNextColorCombination, };

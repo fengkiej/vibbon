@@ -11,7 +11,7 @@ const getSeed = () => {
   return seed;
 };
 
-export const randomInRange = (min, max) => {
+const randomInRange = (min, max) => {
   // http://indiegamr.com/generate-repeatable-random-numbers-in-js/
   if (typeof min != 'number' || typeof max != 'number') {
     throw new Error(`invalid parameter: max: ${max}; min: ${min}.`);
@@ -29,6 +29,19 @@ export const randomInRange = (min, max) => {
   return min + rnd * (max - min);
 };
 
+
+// https://www.30secondsofcode.org/js/s/shuffle
+const shuffle = ([...arr]) => {
+  if (!Array.isArray(arr)) throw new Error(`invalid parameter: ${arr}`);
+
+  let m = arr.length;
+  while (m) {
+    const i = Math.floor(randomInRange(0, m--));
+    [arr[m], arr[i]] = [arr[i], arr[m]];
+  }
+  return arr;
+};
+
 export const prng = {
-  randomInRange, setSeed, getSeed,
+  randomInRange, setSeed, getSeed, shuffle,
 };

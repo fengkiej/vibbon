@@ -13,11 +13,13 @@ var __assign = (this && this.__assign) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.random = void 0;
 var color_generator_1 = require("../color_generator");
+var color_harmony_1 = require("../color_harmony");
 function generatePalette(options) {
     if (options === void 0) { options = {}; }
     var defaults = {
         starting_color: null,
-        n: 5
+        n: 5,
+        with: null, // for options see '../harmonies.json'
     };
     var _options = __assign(__assign({}, defaults), options);
     var hsvColor = _options.starting_color;
@@ -45,6 +47,8 @@ function generatePalette(options) {
         var color = color_generator_1.colorGenerator.randomColor(_options);
         _palette.push(color);
     }
+    if (_options.with != null)
+        _palette = color_harmony_1.colorHarmony.addHarmonyToPalette(_palette, _options.with);
     return _palette;
 }
 exports.random = { generatePalette: generatePalette, colorGenerator: color_generator_1.colorGenerator };

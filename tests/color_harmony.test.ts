@@ -149,4 +149,6 @@ describe("colorHarmony", () => {
         const invalidParameter_2 = {'h': [], 's': 5, 'v': 100};
         expect(() => colorHarmony.getHarmonies(invalidParameter_2)).to.throw(Error, `invalid hsvColor of ${invalidParameter_2}`);
     });
+
+    // TODO: add test for addHarmonyToPalette
 });

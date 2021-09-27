@@ -11,6 +11,7 @@ export declare const random: {
             randomInRange: (min: any, max: any) => any;
             setSeed: (_seed: any) => void;
             getSeed: () => any;
+            shuffle: ([...arr]: any[]) => any[];
         };
         applyColorTemplate: (hsvColor: any, templateName: any) => any;
     };

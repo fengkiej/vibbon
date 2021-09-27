@@ -36,6 +36,7 @@ const HSVToRGB = (h, s, v) => {
   };
 };
 
+
 export const utils = {
   RGBToHSV, HSVToRGB,
 };

@@ -1,7 +1,8 @@
 /* degree arrays taken from: https://github.com/brehaut/color-js/ */
-import harmonies = require('./harmonies.json');
+import {default as harmonies} from './harmonies.json';
+import {prng} from './prng';
 
-export const getHarmonies = (hsvColor) => {
+const getHarmonies = (hsvColor) => {
   if (!(['h', 's', 'v'].every((k) => hsvColor.hasOwnProperty(k)))) {
     throw new Error(`invalid hsvColor of ${hsvColor}`);
   }
@@ -56,7 +57,30 @@ export const getHarmonies = (hsvColor) => {
   return result;
 };
 
+const addHarmonyToPalette = (palette, harmonyType) => {
+  const n = palette.length;
+  const colorSelectionIndex = Math.floor(prng.randomInRange(0, n));
+  const colorSelection = palette[colorSelectionIndex];
+
+  const harmonyResults = getHarmonies(colorSelection);
+
+  const selectedHarmony = harmonyResults[harmonyType];
+
+  const paletteIndexes = Array.from(Array(n)
+      .keys())
+      .splice(colorSelectionIndex, colorSelectionIndex);
+
+  const shuffledIndexes = prng.shuffle(paletteIndexes);
+
+  for (let i = 1; i < selectedHarmony.length; i++) {
+    const r = shuffledIndexes[i];
+    palette[r].h = selectedHarmony[i].h;
+  }
+
+  return palette;
+};
+
 export const colorHarmony = {
-  getHarmonies,
+  getHarmonies, addHarmonyToPalette,
 };
 

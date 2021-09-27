@@ -1,4 +1,4 @@
-import templates = require('./templates.json');
+import * as templates from './templates.json';
 import {prng} from './prng';
 import {utils} from './utils';
 

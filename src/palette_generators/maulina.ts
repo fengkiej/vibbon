@@ -1,14 +1,14 @@
 // method from: https://www.clipstudio.net/how-to-draw/archives/156922
 import { randomColor } from '../color_generator';
-import { randomInRange } from '../prng';
+import { prng } from '../prng';
 import { colorHarmony } from '../color_harmony';
 
 function generatePalette(options = {}) {
-    const paletteTypes = [ "analogous", "analogousWithComplementaryAccent" ]
+    const paletteTypes = [ "analogous", "monochromatic" ]
     const defaults = {
         starting_color: null,
         n: 5,
-        palette_type: null,
+        palette_type: "analogous",
         with: null, // for options see '../harmonies.json'
         shift_config: {
             hue_shift: {
@@ -31,7 +31,6 @@ function generatePalette(options = {}) {
     let n = _options.n;
 
     if (typeof n != 'number') throw new Error(`invalid type for n: ${n}.`);
-    if (_options.palette_type == null) _options.palette_type = "analogous"; // set default to "analogous"
     if (paletteTypes.indexOf(_options.palette_type) == -1) throw new Error(`invalid palette_type of ${_options.palette_type}`);
 
     if (hsvColor == null) {
@@ -42,20 +41,21 @@ function generatePalette(options = {}) {
 
     switch(_options.palette_type) {
         case "analogous":
-            _palette = _generateAnalogousPalette(hsvColor, n, options);
+            _palette = generateAnalogousPalette(hsvColor, n, options);
             break;
         case "monochromatic":
-            _palette = _generateMonochromaticPalette(hsvColor, n, options);
+            _palette = generateMonochromaticPalette(hsvColor, n, options);
             break;
         default:
-            _palette = _generateAnalogousPalette(hsvColor, n, options);
-            break;
+            throw new Error(`invalid palette_type of ${_options.palette_type}.`)
     }
+
+    if (_options.with != null) _palette = colorHarmony.addHarmonyToPalette(_palette, _options.with);
 
     return _palette;
 }
 
-const _generateMonochromaticPalette = (hsvColor, n = 5, options = {}) => {
+const generateMonochromaticPalette = (hsvColor, n = 5, options = {}) => {
     const defaults = {
         shift_config: {
             saturation_shift: {
@@ -82,8 +82,8 @@ const _generateMonochromaticPalette = (hsvColor, n = 5, options = {}) => {
     _palette[mid] = hsvColor;
 
     for (let i = mid - 1; i >= 0; i--) {
-        let saturationShift = randomInRange(saturationShiftMin, saturationShiftMax);
-        let valueShift = randomInRange(valueShiftMin, valueShiftMax);
+        let saturationShift = prng.randomInRange(saturationShiftMin, saturationShiftMax);
+        let valueShift = prng.randomInRange(valueShiftMin, valueShiftMax);
         let prevColor = _palette[i + 1];
         let nextColorCombination = getNextColorCombination(prevColor, {h: 0, s: saturationShift, v: valueShift});
 
@@ -93,8 +93,8 @@ const _generateMonochromaticPalette = (hsvColor, n = 5, options = {}) => {
     }
 
     for (let i = mid + 1; i < n; i++) {
-        let saturationShift = randomInRange(saturationShiftMin, saturationShiftMax);
-        let valueShift = randomInRange(valueShiftMin, valueShiftMax);
+        let saturationShift = prng.randomInRange(saturationShiftMin, saturationShiftMax);
+        let valueShift = prng.randomInRange(valueShiftMin, valueShiftMax);
         let prevColor = _palette[i - 1];
         let nextColorCombination = getNextColorCombination(prevColor, {h: 0, s: saturationShift, v: valueShift});
 
@@ -106,8 +106,7 @@ const _generateMonochromaticPalette = (hsvColor, n = 5, options = {}) => {
     return _palette;
 }
 
-
-const _generateAnalogousPalette = (hsvColor, n = 5, options = {}) => {
+const generateAnalogousPalette = (hsvColor, n = 5, options = {}) => {
     const defaults = {
         shift_config: {
             hue_shift: {
@@ -127,7 +126,7 @@ const _generateAnalogousPalette = (hsvColor, n = 5, options = {}) => {
     let _options = { ...defaults, ...options };
 
     let _palette = [];
-    let direction = Math.round(randomInRange(0, 1)); // 0: shift hue to left (warmer light), 1: shift hue to right (cooler shadow)
+    let direction = Math.round(prng.randomInRange(0, 1)); // 0: shift hue to left (warmer light), 1: shift hue to right (cooler shadow)
     
     let hueShiftMin = _options.shift_config.hue_shift.min;
     let hueShiftMax = _options.shift_config.hue_shift.max;
@@ -142,9 +141,9 @@ const _generateAnalogousPalette = (hsvColor, n = 5, options = {}) => {
     _palette[mid] = hsvColor;
 
     for (let i = mid - 1; i >= 0; i--) {
-        let hueShift = randomInRange(hueShiftMin, hueShiftMax);
-        let saturationShift = randomInRange(saturationShiftMin, saturationShiftMax);
-        let valueShift = randomInRange(valueShiftMin, valueShiftMax);
+        let hueShift = prng.randomInRange(hueShiftMin, hueShiftMax);
+        let saturationShift = prng.randomInRange(saturationShiftMin, saturationShiftMax);
+        let valueShift = prng.randomInRange(valueShiftMin, valueShiftMax);
         let prevColor = _palette[i + 1];
         let nextColorCombination = getNextColorCombination(prevColor, {h: hueShift, s: saturationShift, v: valueShift});
 
@@ -154,9 +153,9 @@ const _generateAnalogousPalette = (hsvColor, n = 5, options = {}) => {
     }
 
     for (let i = mid + 1; i < n; i++) {
-        let hueShift = randomInRange(hueShiftMin, hueShiftMax);
-        let saturationShift = randomInRange(saturationShiftMin, saturationShiftMax);
-        let valueShift = randomInRange(valueShiftMin, valueShiftMax);
+        let hueShift = prng.randomInRange(hueShiftMin, hueShiftMax);
+        let saturationShift = prng.randomInRange(saturationShiftMin, saturationShiftMax);
+        let valueShift = prng.randomInRange(valueShiftMin, valueShiftMax);
         let prevColor = _palette[i - 1];
         let nextColorCombination = getNextColorCombination(prevColor, {h: hueShift, s: saturationShift, v: valueShift});
 
@@ -182,8 +181,8 @@ const getNextColorCombination = (hsvColor, shifts) => {
     value_0 = value_0 < 0? 0 : value_0;
 
     let hue_1 = hsvColor.h + shifts.h;
-    hue_1 = hue_1 > 360? hue_1 % 360 : hue_0;
-    hue_1 = hue_1 < 0? 360 + (hue_1 % 360) : hue_0;
+    hue_1 = hue_1 > 360? hue_1 % 360 : hue_1;
+    hue_1 = hue_1 < 0? 360 + (hue_1 % 360) : hue_1;
 
     let saturation_1 = hsvColor.s + shifts.s;
     saturation_1 = saturation_1 > 100? 100 : saturation_1;
@@ -221,4 +220,4 @@ const getNextColorCombination = (hsvColor, shifts) => {
     }
 }
 
-export const maulina = { generatePalette }
+export const maulina = { generatePalette, getNextColorCombination,  }

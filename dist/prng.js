@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.prng = exports.randomInRange = void 0;
+exports.prng = void 0;
 var seed = null;
 var setSeed = function (_seed) {
     if (typeof _seed != 'number' && _seed != null) {
@@ -27,9 +27,22 @@ var randomInRange = function (min, max) {
     var rnd = seed / 233280;
     return min + rnd * (max - min);
 };
-exports.randomInRange = randomInRange;
+// https://www.30secondsofcode.org/js/s/shuffle
+var shuffle = function (_a) {
+    var _b;
+    var arr = _a.slice(0);
+    if (!Array.isArray(arr))
+        throw new Error("invalid parameter: " + arr);
+    var m = arr.length;
+    while (m) {
+        var i = Math.floor(randomInRange(0, m--));
+        _b = [arr[i], arr[m]], arr[m] = _b[0], arr[i] = _b[1];
+    }
+    return arr;
+};
 exports.prng = {
-    randomInRange: exports.randomInRange,
+    randomInRange: randomInRange,
     setSeed: setSeed,
     getSeed: getSeed,
+    shuffle: shuffle,
 };

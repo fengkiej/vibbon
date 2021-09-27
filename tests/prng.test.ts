@@ -118,4 +118,6 @@ describe("prng", () => {
         min = []; max = {};
         expect(() => prng.randomInRange(min, max)).to.throw(Error, `invalid parameter: max: ${max}; min: ${min}`);
     });
+
+    // TODO: add test for shuffles
 });

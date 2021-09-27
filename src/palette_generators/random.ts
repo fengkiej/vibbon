@@ -1,14 +1,17 @@
 import { colorGenerator } from '../color_generator';
+import { colorHarmony } from '../color_harmony';
 
 function generatePalette(options = {}) {
     const defaults = {
         starting_color: null,
-        n: 5
+        n: 5,
+        with: null, // for options see '../harmonies.json'
     }
     let _options = { ...defaults, ...options };
 
     let hsvColor = _options.starting_color;
     let n = _options.n;
+
     if (hsvColor != null && !(['h', 's', 'v'].every((k) => hsvColor.hasOwnProperty(k)))) {
         throw new Error(`invalid hsvColor of ${hsvColor}.`);
     }
@@ -36,6 +39,8 @@ function generatePalette(options = {}) {
         let color = colorGenerator.randomColor(_options);
         _palette.push(color);
     }
+
+    if (_options.with != null) _palette = colorHarmony.addHarmonyToPalette(_palette, _options.with);
 
     return _palette;
 }

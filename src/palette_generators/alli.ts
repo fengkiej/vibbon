@@ -1,13 +1,15 @@
 // method from: https://designerup.co/blog/practical-guide-to-perfect-ui-color-palettes/ | https://www.youtube.com/watch?v=GyVMoejbGFg&t=1007s
-import templates = require('../templates.json');
+import * as templates from '../templates.json';
 import { colorGenerator } from '../color_generator';
 import { prng } from '../prng';
+import { colorHarmony } from '../color_harmony';
 
 function generatePalette(options = {}) {
     const defaults = {
         starting_color: null,
         n: 5,
-        template: null
+        template: null,
+        with: null, // for options see '../harmonies.json'
     }
     let _options = { ...defaults, ...options };
 
@@ -39,6 +41,8 @@ function generatePalette(options = {}) {
         });
         _palette.push(color);
     }
+
+    if (_options.with != null) _palette = colorHarmony.addHarmonyToPalette(_palette, _options.with);
 
     return _palette;
 }
