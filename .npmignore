@@ -1,0 +1,9 @@
+assets
+
+# from .gitignore
+node_modules
+mochawesome-report
+sonar-project.properties
+.nyc_output
+.scannerwork
+coverage

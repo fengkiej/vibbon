@@ -2,7 +2,9 @@
   "name": "vibbon",
   "version": "0.0.1",
   "description": "Colors and palette generator library.",
-  "main": "src/index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "prepublish": "tsc",
   "scripts": {
     "build": "npx eslint 'src/*' --fix && npx tsc -b --clean && npx tsc -b",
     "test": "npx nyc --reporter=lcov mocha tests"
