@@ -74,7 +74,7 @@ const addHarmonyToPalette = (palette, harmonyType) => {
 
   for (let i = 1; i < shuffledIndexes.length; i++) {
     const r = shuffledIndexes[i];
-    palette[r].h = selectedHarmony[i].h;
+    palette[r].h = selectedHarmony[(i % shuffledIndexes.length)].h;
   }
 
   return palette;
