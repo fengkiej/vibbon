@@ -69,7 +69,7 @@ var addHarmonyToPalette = function (palette, harmonyType) {
     var shuffledIndexes = prng_1.prng.shuffle(paletteIndexes);
     for (var i = 1; i < shuffledIndexes.length; i++) {
         var r = shuffledIndexes[i];
-        palette[r].h = selectedHarmony[(i % shuffledIndexes.length)].h;
+        palette[r].h = selectedHarmony[(i % selectedHarmony.length)].h;
     }
     return palette;
 };
