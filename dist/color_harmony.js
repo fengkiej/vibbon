@@ -67,7 +67,7 @@ var addHarmonyToPalette = function (palette, harmonyType) {
         .keys())
         .splice(colorSelectionIndex, colorSelectionIndex);
     var shuffledIndexes = prng_1.prng.shuffle(paletteIndexes);
-    for (var i = 1; i < selectedHarmony.length; i++) {
+    for (var i = 1; i < shuffledIndexes.length; i++) {
         var r = shuffledIndexes[i];
         palette[r].h = selectedHarmony[i].h;
     }
